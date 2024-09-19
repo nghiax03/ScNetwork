@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class PostDTO {
+    @JsonProperty("user_id")
     private Long userId;
     private String content;
     @JsonProperty("image_url")

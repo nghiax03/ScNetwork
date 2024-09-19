@@ -27,7 +27,7 @@ public class JwtTokenUtils {
     private String secretKey;
 
     public String generateToken(User user) throws Exception{
-        this.generateSecretKey();
+//        this.generateSecretKey();
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("userId", user.getId());

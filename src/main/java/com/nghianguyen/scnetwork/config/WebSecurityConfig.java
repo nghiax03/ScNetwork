@@ -26,8 +26,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers(String.format("%s/users/register", apiPrefix))
                                 .permitAll()
-                                .requestMatchers(String.format("/api/v1/users/login", apiPrefix))
+                                .requestMatchers(String.format("%s/users/login", apiPrefix))
                                 .permitAll()
+                                .requestMatchers(String.format("%s/posts/**", apiPrefix)).permitAll()
                                 .anyRequest().authenticated())
                 .build();
     }
