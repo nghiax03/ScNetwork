@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(String.format("%s/users/login", apiPrefix))
                                 .permitAll()
                                 .requestMatchers(String.format("%s/posts/**", apiPrefix)).permitAll()
+                                .requestMatchers(String.format("%s/comments/**", apiPrefix)).permitAll()
                                 .anyRequest().authenticated())
                 .build();
     }

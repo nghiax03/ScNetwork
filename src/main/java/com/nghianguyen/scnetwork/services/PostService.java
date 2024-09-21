@@ -60,14 +60,14 @@ public class PostService {
     //only update content or delete all
     public Post updatePost(Long id, PostDTO postDTO) throws DataNotFoundException {
         Post existingPost = postRepository.findById(id)
-                .orElseThrow(()-> new DataNotFoundException("Cannot find post contented, come back"));
+                .orElseThrow(()-> new DataNotFoundException("Cannot find post content, come back"));
         existingPost.setContent(postDTO.getContent());
         return postRepository.save(existingPost);
     }
 
     public void deletePost(Long id) throws Exception{
         Post existingPost = postRepository.findById(id)
-                .orElseThrow(()-> new DataNotFoundException("Cannot find post contented, come back"));
+                .orElseThrow(()-> new DataNotFoundException("Cannot find post content, come back"));
         this.postRepository.deleteById(id);
     }
 

@@ -55,4 +55,25 @@ public class PostController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateContentPost(@PathVariable Long id, @RequestBody PostDTO postDTO)
+        throws Exception {
+        try {
+           Post updatedPost = postService.updatePost(id, postDTO);
+           return ResponseEntity.ok().body(updatedPost);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) throws Exception{
+        try{
+            postService.deletePost(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete post successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
