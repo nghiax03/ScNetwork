@@ -50,7 +50,7 @@ public class CommentService {
     }
 
     //comments are usually not editable
-    public void deleteByComment(Long id) throws Exception{
+    public void deleteCommentById(Long id) throws Exception{
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(()-> new DataNotFoundException("Comment is not exist"));
         commentRepository.deleteById(id);

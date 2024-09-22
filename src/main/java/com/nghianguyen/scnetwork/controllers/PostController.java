@@ -2,6 +2,7 @@ package com.nghianguyen.scnetwork.controllers;
 
 import com.nghianguyen.scnetwork.dtos.PostDTO;
 import com.nghianguyen.scnetwork.models.Post;
+import com.nghianguyen.scnetwork.response.ResponseSuccess;
 import com.nghianguyen.scnetwork.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,23 +58,25 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateContentPost(@PathVariable Long id, @RequestBody PostDTO postDTO)
+    public ResponseSuccess updateContentPost(@PathVariable Long id, @RequestBody PostDTO postDTO)
         throws Exception {
         try {
            Post updatedPost = postService.updatePost(id, postDTO);
-           return ResponseEntity.ok().body(updatedPost);
+           return new ResponseSuccess(HttpStatus.ACCEPTED,
+                   "Updated post successfully with id: " + id + "\n" + updatedPost);
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseSuccess(HttpStatus.BAD_REQUEST,
+                    "Cannot updated post, error" + e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id) throws Exception{
+    public ResponseSuccess deletePost(@PathVariable Long id) throws Exception{
         try{
             postService.deletePost(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete post successfully");
+            return new ResponseSuccess(HttpStatus.ACCEPTED, "Delete post successfully with id: "+ id);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseSuccess(HttpStatus.BAD_REQUEST, "Cannot delete post, error" + e.getMessage());
         }
     }
 }

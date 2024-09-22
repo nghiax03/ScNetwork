@@ -1,5 +1,6 @@
 package com.nghianguyen.scnetwork.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
+    @JsonIgnore
     private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
