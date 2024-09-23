@@ -2,6 +2,8 @@ package com.nghianguyen.scnetwork.controllers;
 
 import com.nghianguyen.scnetwork.dtos.CommentDTO;
 import com.nghianguyen.scnetwork.models.Comment;
+import com.nghianguyen.scnetwork.response.ResponseData;
+import com.nghianguyen.scnetwork.response.ResponseError;
 import com.nghianguyen.scnetwork.response.ResponseSuccess;
 import com.nghianguyen.scnetwork.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +22,35 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/post/{id}")
-    public ResponseEntity<?> createComment(@RequestBody CommentDTO commentDTO,
-                                           @PathVariable Long id)
+    public ResponseData<?> createComment(@RequestBody CommentDTO commentDTO,
+                                         @PathVariable Long id)
         throws Exception {
-        Comment newComment = commentService.createComment(commentDTO, id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
+        try{
+            Comment newComment = commentService.createComment(commentDTO, id);
+            return new ResponseData<>(HttpStatus.OK.value(),"Created a comment");
+        } catch (Exception e) {
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(),
+                    "Cannot create comment: " + e.getMessage());
+        }
     }
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId)
+    public ResponseData<List<Comment>> getCommentsByPostId(@PathVariable Long postId)
     {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
-        return ResponseEntity.ok(comments);
+        return new ResponseData<>(HttpStatus.OK.value(), "get all comments");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseSuccess updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDTO)
+            throws Exception {
+        this.commentService.updateComment(id, commentDTO);
+        return new ResponseSuccess(HttpStatus.ACCEPTED, "Updated comment with id Cm: " + id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseSuccess deleteComment(@PathVariable Long id, BindingResult result)
+    public ResponseSuccess deleteComment(@PathVariable Long id)
             throws Exception {
-        if(result.hasErrors()){
-            List<String> messages = result.getFieldErrors()
-                    .stream().map(FieldError::getDefaultMessage)
-                    .toList();
-            return new ResponseSuccess(HttpStatus.BAD_REQUEST, "Cannot delete");
-        }
         commentService.deleteCommentById(id);
-        return new ResponseSuccess(HttpStatus.ACCEPTED, "Delete comment successfully");
+        return new ResponseSuccess(HttpStatus.NO_CONTENT, "Delete comment successfully");
     }
 }

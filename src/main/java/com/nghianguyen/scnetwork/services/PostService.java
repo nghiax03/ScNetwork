@@ -8,6 +8,7 @@ import com.nghianguyen.scnetwork.repositories.PostRepository;
 import com.nghianguyen.scnetwork.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -25,6 +26,7 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public Post createPost(List<MultipartFile> files, String content, Long id)
             throws Exception{
         User exisitingUser = userRepository.findById(id)

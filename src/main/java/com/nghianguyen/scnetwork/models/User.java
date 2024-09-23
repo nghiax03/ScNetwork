@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User extends BaseEntity implements  UserDetails{
+public class User extends BaseEntity implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,8 @@ public class User extends BaseEntity implements  UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
          List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+         authorities.add(new SimpleGrantedAuthority("USER"));
+//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
          return authorities;
     }
 
@@ -59,5 +60,14 @@ public class User extends BaseEntity implements  UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    @Override
+    public String getUsername() {
+        return email; // Trả về email ở đây
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 }

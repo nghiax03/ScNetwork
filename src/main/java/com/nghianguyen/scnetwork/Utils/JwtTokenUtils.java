@@ -80,8 +80,8 @@ public class JwtTokenUtils {
         return this.extractClaim(token, Claims::getSubject);
    }
 
-   public boolean validateToken(String token, UserDetails userDetails){
-        String email = extractEmail(token);
+   public Boolean validateToken(String token, UserDetails userDetails){
+        final String email = extractEmail(token);
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
    }
 

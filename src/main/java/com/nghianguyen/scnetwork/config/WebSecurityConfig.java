@@ -1,6 +1,7 @@
 package com.nghianguyen.scnetwork.config;
 
 //import com.nghianguyen.scnetwork.Utils.JwtTokenFilter;
+import com.nghianguyen.scnetwork.Utils.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,21 +18,40 @@ public class WebSecurityConfig {
     @Value("${api.prefix}")
     private String apiPrefix;
 
-//    @Autowired
-//    private JwtTokenFilter jwtTokenFilter;
+    @Autowired
+    private JwtTokenFilter jwtTokenFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http.csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers(String.format("%s/users/register", apiPrefix))
                                 .permitAll()
                                 .requestMatchers(String.format("%s/users/login", apiPrefix))
                                 .permitAll()
-                                .requestMatchers(String.format("%s/posts/**", apiPrefix)).permitAll()
-                                .requestMatchers(String.format("%s/comments/**", apiPrefix)).permitAll()
+
+                                .requestMatchers("POST",
+                                        String.format("%s/posts/**", apiPrefix)).permitAll()
+                                .requestMatchers("GET",
+                                        String.format("%s/posts/**", apiPrefix)).permitAll()
+                                .requestMatchers("PUT",
+                                        String.format("%s/posts/**", apiPrefix)).permitAll()
+                                .requestMatchers("DELETE",
+                                        String.format("%s/posts/**", apiPrefix)).permitAll()
+
+                                .requestMatchers("POST",
+                                        String.format("%s/comments/**", apiPrefix)).permitAll()
+                                .requestMatchers("GET",
+                                        String.format("%s/comments/**", apiPrefix)).permitAll()
+                                .requestMatchers("PUT",
+                                        String.format("%s/comments/**", apiPrefix)).permitAll()
+                                .requestMatchers("DELETE",
+                                        String.format("%s/comments/**", apiPrefix)).permitAll()
+
                                 .requestMatchers(String.format("%s/message/**", apiPrefix)).permitAll()
                                 .anyRequest().authenticated())
                 .build();
     }
+
 }

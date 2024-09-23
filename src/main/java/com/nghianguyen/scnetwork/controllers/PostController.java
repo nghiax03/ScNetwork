@@ -34,20 +34,24 @@ public class PostController {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @PostMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
+    //post the token with user id must same the id on path variable
+    @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createPost(@RequestParam("files") List<MultipartFile> files,
                                         @RequestParam("content") String content,
                                         @PathVariable("id") Long userId) throws Exception {
         try{
+            if (userId == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID is missing");
+            }
             for(MultipartFile file : files){
                 if(file.getSize() > 10 * 1024 * 1024){
                     throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE,
                             "File is too large! Maximum size is 10MB");
                 }
                 String contentType = file.getContentType();
-                if(contentType == null || !contentType.startsWith("image/")){
+                if(contentType == null){
                     return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                            .body("FIle must be an image");
+                            .body("File must be an image");
                 }
             }
             Post newPost = postService.createPost(files, content, userId);
@@ -74,7 +78,7 @@ public class PostController {
     public ResponseSuccess deletePost(@PathVariable Long id) throws Exception{
         try{
             postService.deletePost(id);
-            return new ResponseSuccess(HttpStatus.ACCEPTED, "Delete post successfully with id: "+ id);
+            return new ResponseSuccess(HttpStatus.NO_CONTENT, "Delete post successfully with id: "+ id);
         } catch (Exception e) {
             return new ResponseSuccess(HttpStatus.BAD_REQUEST, "Cannot delete post, error" + e.getMessage());
         }
