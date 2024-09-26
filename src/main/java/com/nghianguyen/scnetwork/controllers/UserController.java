@@ -5,14 +5,19 @@ import com.nghianguyen.scnetwork.dtos.UserLoginDTO;
 import com.nghianguyen.scnetwork.models.User;
 import com.nghianguyen.scnetwork.response.LoginResponse;
 import com.nghianguyen.scnetwork.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.descriptor.LocalResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
@@ -20,6 +25,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
+    private LocaleResolver localeResolver;
 //    @Autowired
 //    private ApiPrefixCheck apiPrefixCheck;
 
@@ -45,14 +55,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO userLoginDTO)
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO userLoginDTO,
+                                   HttpServletRequest request)
         throws Exception {
         try{
+            Locale locale = localeResolver.resolveLocale(request);
             String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             return ResponseEntity.ok(
                     LoginResponse
                             .builder()
-                            .message("Login Successfully")
+                            .message(messageSource.getMessage("user.login.login_successfully", null, locale))
                             .token(token)
                             .build());
         } catch (Exception e) {
