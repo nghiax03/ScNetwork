@@ -1,7 +1,10 @@
 package com.nghianguyen.scnetwork.controllers;
 
+import com.nghianguyen.scnetwork.Utils.LocalizationUtils;
+import com.nghianguyen.scnetwork.Utils.MessageKeys;
 import com.nghianguyen.scnetwork.dtos.UserDTO;
 import com.nghianguyen.scnetwork.dtos.UserLoginDTO;
+import com.nghianguyen.scnetwork.models.Message;
 import com.nghianguyen.scnetwork.models.User;
 import com.nghianguyen.scnetwork.response.LoginResponse;
 import com.nghianguyen.scnetwork.services.UserService;
@@ -26,10 +29,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private LocaleResolver localeResolver;
+    private LocalizationUtils localizationUtils;
 //    @Autowired
 //    private ApiPrefixCheck apiPrefixCheck;
 
@@ -59,16 +59,20 @@ public class UserController {
                                    HttpServletRequest request)
         throws Exception {
         try{
-            Locale locale = localeResolver.resolveLocale(request);
             String token = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
             return ResponseEntity.ok(
                     LoginResponse
                             .builder()
-                            .message(messageSource.getMessage("user.login.login_successfully", null, locale))
+                            .message(localizationUtils.getLocalizedMessage(MessageKeys.LOGIN_SUCCESSFULLY))
                             .token(token)
                             .build());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                   LoginResponse
+                           .builder()
+                           .message(localizationUtils.getLocalizedMessage(MessageKeys.LOGIN_FAILED))
+                           .build()
+            );
         }
     }
 }

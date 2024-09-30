@@ -51,6 +51,19 @@ public class WebSecurityConfig {
                             .requestMatchers("DELETE",
                                     String.format("%s/posts/**", apiPrefix)).permitAll()
 
+                            // Swagger UI access
+                            .requestMatchers(
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**",
+                                    "/v2/api-docs",
+                                    "/configuration/ui",
+                                    "/swagger-resources/**",
+                                    "/configuration/security",
+                                    "/swagger-ui.html",
+                                    "/webjars/**",
+                                    "/v2/**").permitAll()
+
+
                             .requestMatchers("POST",
                                     String.format("%s/comments/**", apiPrefix)).permitAll()
                             .requestMatchers("GET",
@@ -61,6 +74,9 @@ public class WebSecurityConfig {
                                     String.format("%s/comments/**", apiPrefix)).permitAll()
 
                             .requestMatchers(String.format("%s/message/**", apiPrefix)).permitAll()
+
+                            .requestMatchers(String.format("%s/like/**", apiPrefix)).authenticated()
+
                             .requestMatchers("/index.html", "/static/**", "/ws/**").permitAll()
                             .anyRequest().authenticated();
                 }).csrf(AbstractHttpConfigurer::disable);

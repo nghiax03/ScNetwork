@@ -26,5 +26,12 @@ api:
 jwt:
   expiration: 2592000
   secretKey: Wdif6reUEVYXjIw8J9xGsIUBWy8tKXqaYYSQotiJfMo=
+open:
+  api:
+    title: API document
+    version: v1.0.0
+    description: Mota Api service
+    serverUrl: http://localhost:8089
+    serverName: server test
 server:
   port: 8089
