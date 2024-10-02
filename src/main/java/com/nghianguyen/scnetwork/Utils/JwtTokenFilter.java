@@ -39,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            if(isBypassToken(request)){
+                if(isBypassToken(request)){
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -69,7 +69,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private boolean isBypassToken(@NotNull HttpServletRequest request) {
         final List<Pair<String, String>> byPassToken =
                 Arrays.asList(Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
-                        Pair.of(String.format("%s/users/login", apiPrefix), "POST"));
+                        Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
+                        Pair.of("/index.html", "GET"),
+                        Pair.of("", "GET"));
         //just login/register byass
         //get Path, Method
         //condition(path=="/", method = "CURD")

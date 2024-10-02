@@ -77,6 +77,9 @@ public class WebSecurityConfig {
 
                             .requestMatchers(String.format("%s/like/**", apiPrefix)).authenticated()
 
+                            .requestMatchers("http://localhost:8089/index.html").permitAll()
+                            .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() //accept folder in css, js
+
                             .requestMatchers("/index.html", "/static/**", "/ws/**").permitAll()
                             .anyRequest().authenticated();
                 }).csrf(AbstractHttpConfigurer::disable);
