@@ -70,8 +70,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final List<Pair<String, String>> byPassToken =
                 Arrays.asList(Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
                         Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
-                        Pair.of("/index.html", "GET"),
-                        Pair.of("", "GET"));
+                        Pair.of("/index.html", "GET"));
         //just login/register byass
         //get Path, Method
         //condition(path=="/", method = "CURD")

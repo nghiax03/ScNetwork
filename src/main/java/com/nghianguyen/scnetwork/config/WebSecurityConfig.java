@@ -45,11 +45,11 @@ public class WebSecurityConfig {
                             .requestMatchers("POST",
                                     String.format("%s/posts/**", apiPrefix)).permitAll()
                             .requestMatchers("GET",
-                                    String.format("%s/posts/**", apiPrefix)).permitAll()
+                                    String.format("%s/posts/**", apiPrefix)).authenticated()
                             .requestMatchers("PUT",
-                                    String.format("%s/posts/**", apiPrefix)).permitAll()
+                                    String.format("%s/posts/**", apiPrefix)).authenticated()
                             .requestMatchers("DELETE",
-                                    String.format("%s/posts/**", apiPrefix)).permitAll()
+                                    String.format("%s/posts/**", apiPrefix)).authenticated()
 
                             // Swagger UI access
                             .requestMatchers(
@@ -65,15 +65,18 @@ public class WebSecurityConfig {
 
 
                             .requestMatchers("POST",
-                                    String.format("%s/comments/**", apiPrefix)).permitAll()
+                                    String.format("%s/comments/**", apiPrefix)).authenticated()
                             .requestMatchers("GET",
-                                    String.format("%s/comments/**", apiPrefix)).permitAll()
+                                    String.format("%s/comments/**", apiPrefix)).authenticated()
                             .requestMatchers("PUT",
-                                    String.format("%s/comments/**", apiPrefix)).permitAll()
+                                    String.format("%s/comments/**", apiPrefix)).authenticated()
                             .requestMatchers("DELETE",
-                                    String.format("%s/comments/**", apiPrefix)).permitAll()
+                                    String.format("%s/comments/**", apiPrefix)).authenticated()
 
-                            .requestMatchers(String.format("%s/message/**", apiPrefix)).permitAll()
+                            .requestMatchers("GET",
+                                    String.format("%s/relationship/**", apiPrefix)).authenticated()
+
+                            .requestMatchers(String.format("%s/message/**", apiPrefix)).authenticated()
 
                             .requestMatchers(String.format("%s/like/**", apiPrefix)).authenticated()
 

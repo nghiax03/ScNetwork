@@ -55,7 +55,7 @@ public class PostController {
                 }
             }
             Post newPost = postService.createPost(files, content, userId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newPost);
+            return ResponseEntity.status(HttpStatus.OK).body(newPost);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
