@@ -23,6 +23,8 @@ public class UserDTO {
     @JsonProperty("full_name")
     private String fullName;
 
+    private boolean isOnline;
+
     public User fromUser(){
         return User
                 .builder()

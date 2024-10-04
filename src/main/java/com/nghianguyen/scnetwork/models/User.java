@@ -34,6 +34,9 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Column(name = "is_online", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean isOnline;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
          List<SimpleGrantedAuthority> authorities = new ArrayList<>();

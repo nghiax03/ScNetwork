@@ -6,6 +6,7 @@ import com.nghianguyen.scnetwork.dtos.UserDTO;
 import com.nghianguyen.scnetwork.exception.DataNotFoundException;
 import com.nghianguyen.scnetwork.models.User;
 import com.nghianguyen.scnetwork.repositories.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,13 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @PostConstruct
+    public void isOnlineSetup(){
+        if(this.userRepository.count() > 0){
+            this.userRepository.setIsOnlineToFalse();
+        }
+    }
 
     public User register(UserDTO userDTO) throws Exception {
         String email = userDTO.getEmail();
