@@ -2,13 +2,18 @@ package com.nghianguyen.scnetwork.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nghianguyen.scnetwork.dtos.RelationshipDTO;
+import com.nghianguyen.scnetwork.exception.CustomException;
 import com.nghianguyen.scnetwork.models.relationship.FriendsAllViewModel;
 import com.nghianguyen.scnetwork.models.relationship.FriendsCandidatesViewModel;
+import com.nghianguyen.scnetwork.response.ResponseSuccess;
 import com.nghianguyen.scnetwork.services.RelationshipService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,5 +47,27 @@ public class RelationshipController {
         Long loggedMap = Long.valueOf(loggedInUserId);
         String search = (String) body.get("keyWord");
         return this.relationshipService.searchUser(loggedMap, search);
+    }
+
+    @GetMapping(value = "/findFriends/{id}", produces = "application/json")
+    public List<FriendsCandidatesViewModel> findAllNotFriends(@PathVariable Long id) throws Exception {
+        return this.relationshipService.findAllFriendCandidates(id);
+    }
+
+    @PostMapping(value = "/addFriend")
+    public ResponseSuccess addFriend(@RequestBody Map<String, Object> body) throws Exception{
+        String logedInUserId = (String) body.get("loggedInUserId");
+        Long loggedMap = Long.valueOf(logedInUserId);
+
+        String friendCandidateId = (String) body.get("friendCandidateId");
+        Long friendMap =  Long.valueOf(friendCandidateId);
+
+        boolean result = this.relationshipService.createRequestForAddingFriend(loggedMap, friendMap);
+        if(result){
+            return new ResponseSuccess(HttpStatus.OK,
+                    "success friend request submission message"
+                    );
+        }
+        throw new CustomException("cannot add friend");
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelationshipDTO {
-    private String id;
+    private Long id;
     private User userOne;
     private User userTwo;
     private String status;

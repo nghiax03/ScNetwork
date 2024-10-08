@@ -75,6 +75,12 @@ public class WebSecurityConfig {
 
                             .requestMatchers("GET",
                                     String.format("%s/relationship/**", apiPrefix)).authenticated()
+                            .requestMatchers("POST",
+                                    String.format("%s/relationship/**", apiPrefix)).authenticated()
+                            .requestMatchers("PUT",
+                                    String.format("%s/relationship/**", apiPrefix)).authenticated()
+                            .requestMatchers("DELETE",
+                                    String.format("%s/relationship/**", apiPrefix)).authenticated()
 
                             .requestMatchers(String.format("%s/message/**", apiPrefix)).authenticated()
 
