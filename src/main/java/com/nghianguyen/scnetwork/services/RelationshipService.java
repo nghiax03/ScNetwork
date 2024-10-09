@@ -102,6 +102,29 @@ public class RelationshipService {
         }
     }
 
+    public boolean acceptFriend(Long loggedInUserId, Long friendToAcceptId){
+        try {
+            return this.changeStatusAndSave(loggedInUserId, friendToAcceptId, "0", "1");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean removeFriend(Long loggedInUserId, Long friendToRemoveId){
+        try {
+            return this.changeStatusAndSave(loggedInUserId, friendToRemoveId, "1", "2");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean cancelFriendShipRequest(Long loggedInUserId, Long friendToRejectId){
+        try {
+            return this.changeStatusAndSave(loggedInUserId, friendToRejectId, "0", "2");
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
     private FriendsCandidatesViewModel mapUser(FriendsCandidatesViewModel user,
                                                List<Relationship> relationshipList){
         Relationship relationshipWithCurrentUser =
@@ -123,7 +146,7 @@ public class RelationshipService {
                 .orElseThrow(()->
                         new DataNotFoundException("Cannot found logged in user id: " + loggedInUserId));
 
-        User userFriend = this.userRepository.findById(loggedInUserId)
+        User userFriend = this.userRepository.findById(friendId)
                 .orElseThrow(()->
                         new DataNotFoundException("Cannot found friend user id: " + friendId));
         Relationship relationship = this.relatioshipRepository

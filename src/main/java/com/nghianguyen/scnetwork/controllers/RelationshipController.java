@@ -49,7 +49,7 @@ public class RelationshipController {
         return this.relationshipService.searchUser(loggedMap, search);
     }
 
-    @GetMapping(value = "/findFriends/{id}", produces = "application/json")
+    @GetMapping(value = "/findAllNotFriends/{id}", produces = "application/json")
     public List<FriendsCandidatesViewModel> findAllNotFriends(@PathVariable Long id) throws Exception {
         return this.relationshipService.findAllFriendCandidates(id);
     }
@@ -68,6 +68,45 @@ public class RelationshipController {
                     "success friend request submission message"
                     );
         }
-        throw new CustomException("cannot add friend");
+        throw new CustomException("Internal server error");
+    }
+
+    @PostMapping(value = "/acceptFriend")
+    public ResponseSuccess acceptFriend(@RequestBody Map<String, Object> body){
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String friendToAcceptId = (String) body.get("friendToAcceptId");
+        Long userIdMapped = Long.valueOf(loggedInUserId);
+        Long friendAcceptIdMapped = Long.valueOf(friendToAcceptId);
+        boolean result = this.relationshipService.acceptFriend(userIdMapped, friendAcceptIdMapped);
+        if(result){
+            return new ResponseSuccess(HttpStatus.CREATED, "accept friend success");
+        }
+        throw new CustomException("Internal server error");
+    }
+
+    @PostMapping("/cancelFriend")
+    public ResponseSuccess cancelFriend(@RequestBody Map<String, Object> body) {
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String cancelFriendId = (String) body.get("cancelFriendId");
+        Long userIdMapped = Long.valueOf(loggedInUserId);
+        Long cancelFrIdMapped = Long.valueOf(cancelFriendId);
+        boolean result = this.relationshipService.cancelFriendShipRequest(userIdMapped, cancelFrIdMapped);
+        if(result){
+            return new ResponseSuccess(HttpStatus.ACCEPTED, "cancel friend success");
+        }
+        throw new CustomException("Internal server error");
+    }
+
+    @PostMapping("/removeFriend")
+    public ResponseSuccess removeFriend(@RequestBody Map<String, Object> body) {
+        String loggedInUserId = (String) body.get("loggedInUserId");
+        String removeFriendId = (String) body.get("removeFriendId");
+        Long userIdMapped = Long.valueOf(loggedInUserId);
+        Long removeFrIdMapped = Long.valueOf(removeFriendId);
+        boolean result = this.relationshipService.removeFriend(userIdMapped, removeFrIdMapped);
+        if(result){
+            return new ResponseSuccess(HttpStatus.ACCEPTED, "remove friend success");
+        }
+        throw new CustomException("Internal server error");
     }
 }
