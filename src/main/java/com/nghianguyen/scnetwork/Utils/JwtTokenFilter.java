@@ -83,7 +83,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         for(Pair<String, String> byPass : byPassToken){
             if(servletPath.contains(byPass.getFirst())
             && servletMethod.contains(byPass.getSecond())){
-                return  true;
+                return true;
             }
         }
         return false;

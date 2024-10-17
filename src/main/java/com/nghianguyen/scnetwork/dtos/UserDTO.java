@@ -5,11 +5,14 @@ import com.nghianguyen.scnetwork.models.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserDTO {
     @NotBlank
     private String username;
@@ -23,7 +26,7 @@ public class UserDTO {
     @JsonProperty("full_name")
     private String fullName;
 
-    private boolean isOnline;
+//    private boolean isOnline;
 
     public User fromUser(){
         return User
